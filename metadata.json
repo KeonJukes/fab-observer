@@ -1,0 +1,6 @@
+{
+  "name": "Fabulous Fab Observer",
+  "description": "A high-fidelity observability dashboard for semiconductor fabrication facilities and robotic fleets. Features real-time telemetry simulations, 3D/2D robotic arm visualizations, and facility registry management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
