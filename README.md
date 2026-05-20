@@ -5,25 +5,10 @@
 
 The objective of this program is to simulate how AI agents can use robotic arm temperature, current, and vibration sensor data to predict faults before they occur. Reducing downtime would help fab's save on overhead cost associated with getting robotic arms back up and running. This project is part of the Ohlone College Semiconductor Skills Bridge Academy poster presentation event.
 
-## Test in Production
+------------------------------------------------------------------------------------------------------------
 
-Here is the production link to test the project: https://fabmanager-semiconductor-facility-tracker-1066913899435.us-west2.run.app
-
-## Run Locally
-
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
-
-
----------------------------------------------------------------
-
-# 🏭 Fabulous Fab Observer
+## 🏭 Fabulous Fab Observer
+by Brandon Karp, Lester Toy, and Keon Jukes
 
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react&logoColor=white&style=flat-square)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white&style=flat-square)](https://www.typescriptlang.org/)
@@ -116,3 +101,7 @@ The dashboard stands on a modern, robust framework architecture:
 *   **Sidebar Toggle**: Click the Menu button on the top-left on smaller displays to bring up the off-canvas Facility Index.
 *   **Emergency Stop**: Trigger emergency stops directly on the robot detail views to cut simulated currents and see sensor feeds enter decommission modes in real time.
 *   **Live Tab**: Switch to the `Live` panel under Robot details for the custom live stream feed representing current mechanical operations.
+
+## Test in Production
+
+Here is the production link to test the project: https://fabmanager-semiconductor-facility-tracker-1066913899435.us-west2.run.app
