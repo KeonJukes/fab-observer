@@ -5,6 +5,10 @@
 
 The objective of this program is to simulate how AI agents can use robotic arm temperature, current, and vibration sensor data to predict faults before they occur. Reducing downtime would help fab's save on overhead cost associated with getting robotic arms back up and running. This project is part of the Ohlone College Semiconductor Skills Bridge Academy poster presentation event.
 
+## Test in Production
+
+Here is the production link to test the project: https://fabmanager-semiconductor-facility-tracker-1066913899435.us-west2.run.app
+
 ## Run Locally
 
 **Prerequisites:**  Node.js
