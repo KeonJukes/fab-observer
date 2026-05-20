@@ -33,7 +33,8 @@ import {
   Table as TableIcon,
   Users,
   MessageSquare,
-  Phone
+  Phone,
+  Menu
 } from 'lucide-react';
 import { 
   LineChart, 
@@ -57,26 +58,37 @@ import { RobotArm3D } from './components/RobotArm3D.tsx';
 
 // --- Components ---
 
-const Header = () => (
-  <header className="h-16 bg-white border-b border-brand-border flex items-center justify-between px-8 shrink-0 z-20">
-    <div className="flex items-center gap-3">
-      <div className="w-8 h-8 bg-brand-primary rounded-md flex items-center justify-center shadow-sm">
+const Header = ({ onToggleSidebar }: { onToggleSidebar: () => void }) => (
+  <header className="h-16 bg-white border-b border-brand-border flex items-center justify-between px-4 sm:px-8 shrink-0 z-20">
+    <div className="flex items-center gap-2 sm:gap-3 overflow-hidden">
+      {/* Mobile toggle button */}
+      <button 
+        onClick={onToggleSidebar}
+        className="lg:hidden p-2 -ml-2 rounded-lg text-slate-500 hover:text-brand-primary hover:bg-slate-50 transition-colors focus:outline-none"
+        title="Toggle Menu"
+      >
+        <Menu size={20} />
+      </button>
+
+      <div className="w-8 h-8 bg-brand-primary rounded-md flex items-center justify-center shadow-sm shrink-0">
         <Box className="w-5 h-5 text-white" />
       </div>
-      <h1 className="text-lg font-bold text-slate-800 tracking-tight">FABULOUS <span className="text-brand-primary font-medium">FAB OBSERVER</span></h1>
+      <h1 className="text-sm xs:text-base sm:text-lg font-bold text-slate-800 tracking-tight truncate">
+        FABULOUS <span className="text-brand-primary font-medium">FAB OBSERVER</span>
+      </h1>
     </div>
-    <div className="flex gap-4 items-center">
+    <div className="flex gap-2 sm:gap-4 items-center shrink-0">
       <Link 
         to="/dashboard" 
-        className="flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-brand-primary transition-colors px-3 py-2 rounded-lg hover:bg-slate-50"
+        className="flex items-center gap-1.5 sm:gap-2 text-xs font-bold text-slate-500 hover:text-brand-primary transition-colors px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg hover:bg-slate-50"
       >
-        <LayoutDashboard size={18} />
+        <LayoutDashboard size={16} className="sm:w-[18px] sm:h-[18px]" />
         <span className="hidden md:inline uppercase tracking-widest">Dashboard</span>
       </Link>
       <span className="hidden sm:inline text-[10px] font-semibold text-slate-400 uppercase tracking-widest bg-slate-100 px-2 py-1 rounded">Bay Area Operations</span>
       <Link 
         to="/new" 
-        className="btn-primary text-sm h-10"
+        className="btn-primary text-xs sm:text-sm h-9 sm:h-10 px-3 sm:px-4"
       >
         <Plus size={16} />
         <span className="hidden xs:inline">Add Facility</span>
@@ -88,11 +100,13 @@ const Header = () => (
 const Sidebar = ({ 
   fabs, 
   onDelete, 
-  onReset 
+  onReset,
+  onClose
 }: { 
   fabs: Fab[]; 
   onDelete: (id: string) => void;
   onReset: () => void;
+  onClose?: () => void;
 }) => {
   const { id: activeId } = useParams();
   const [search, setSearch] = useState('');
@@ -103,8 +117,20 @@ const Sidebar = ({
   );
 
   return (
-    <aside className="w-80 md:w-96 border-r border-brand-border bg-white flex flex-col shrink-0 overflow-hidden">
-      <div className="p-4 border-b border-slate-100 bg-slate-50/50">
+    <aside className="w-80 md:w-96 border-r border-brand-border bg-white flex flex-col shrink-0 overflow-hidden h-full">
+      <div className="p-4 border-b border-slate-100 bg-slate-50/50 flex flex-col gap-3">
+        {onClose && (
+          <div className="flex items-center justify-between lg:hidden border-b border-slate-100 pb-2">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] font-mono">Registry Index</span>
+            <button 
+              onClick={onClose}
+              className="p-1 hover:bg-slate-200/60 rounded text-slate-500 hover:text-slate-800 transition-colors focus:outline-none"
+              title="Close Panel"
+            >
+              <ChevronLeft size={16} />
+            </button>
+          </div>
+        )}
         <div className="flex gap-2">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
@@ -132,6 +158,7 @@ const Sidebar = ({
             <Link 
               key={fab.id}
               to={`/fab/${fab.id}`}
+              onClick={onClose}
               className={cn(
                 "group block p-4 rounded-xl border transition-all duration-200 relative",
                 activeId === fab.id 
@@ -210,25 +237,25 @@ const RobotList = ({ robots, onAddRobot, onDeleteRobot }: { robots: Robot[], onA
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="p-10 flex-1 overflow-y-auto"
+      className="p-4 sm:p-6 lg:p-10 flex-1 overflow-y-auto"
     >
       <div className="max-w-5xl mx-auto">
-        <Link to={`/fab/${id}`} className="inline-flex items-center gap-2 text-slate-400 hover:text-brand-primary mb-8 transition-colors group">
-          <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-          <span className="font-mono text-xs uppercase tracking-widest">Return to Hub</span>
+        <Link to={`/fab/${id}`} className="inline-flex items-center gap-2 text-slate-400 hover:text-brand-primary mb-6 sm:mb-8 transition-colors group">
+          <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+          <span className="font-mono text-[10px] sm:text-xs uppercase tracking-widest">Return to Hub</span>
         </Link>
 
-        <div className="flex items-center justify-between mb-10">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-10">
           <div>
-            <h2 className="text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-4">
-              <Bot className="text-brand-primary" size={32} />
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-2 sm:gap-4">
+              <Bot size={24} className="text-brand-primary shrink-0 sm:w-8 sm:h-8" />
               Robot Fleet Observability
             </h2>
-            <p className="text-slate-500 mt-1 font-mono text-[11px] uppercase tracking-wider">
+            <p className="text-slate-500 mt-1 font-mono text-[10px] sm:text-[11px] uppercase tracking-wider">
               Managing <span className="text-brand-primary font-bold">{fabRobots.length}</span> Active Automation Units
             </p>
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 sm:gap-6 self-start sm:self-auto">
             <div className="hidden lg:flex gap-4">
               <div className="bg-white border border-slate-200 px-4 py-2 rounded-lg text-center shadow-sm">
                 <p className="text-[10px] text-slate-400 uppercase font-bold tracking-tighter">Healthy Units</p>
@@ -241,7 +268,7 @@ const RobotList = ({ robots, onAddRobot, onDeleteRobot }: { robots: Robot[], onA
             </div>
             <button 
               onClick={() => id && onAddRobot(id)}
-              className="px-6 py-3 bg-brand-primary text-white text-xs font-bold uppercase tracking-[0.2em] rounded-xl hover:bg-brand-primary-hover shadow-lg shadow-brand-primary/20 transition-all flex items-center gap-2"
+              className="px-4 py-2.5 sm:px-6 sm:py-3 bg-brand-primary text-white text-[10px] sm:text-xs font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] rounded-xl hover:bg-brand-primary-hover shadow-lg shadow-brand-primary/20 transition-all flex items-center gap-1.5 sm:gap-2"
             >
               <Plus size={16} />
               Add Unit
@@ -249,7 +276,7 @@ const RobotList = ({ robots, onAddRobot, onDeleteRobot }: { robots: Robot[], onA
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {fabRobots.map((robot) => (
             <div key={robot.id} className="relative group">
               <Link 
@@ -994,32 +1021,32 @@ const RobotDetail = ({ robots, onUpdateRobot, onDeleteRobot }: { robots: Robot[]
       )}
 
       <div className="max-w-5xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <Link to={`/fab/${id}/robots`} className="inline-flex items-center gap-2 text-slate-400 hover:text-brand-primary transition-colors group">
-            <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-            <span className="font-mono text-xs uppercase tracking-widest">Return to Fleet</span>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
+          <Link to={`/fab/${id}/robots`} className="inline-flex items-center gap-2 text-slate-400 hover:text-brand-primary transition-colors group shrink-0">
+            <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+            <span className="font-mono text-[10px] sm:text-xs uppercase tracking-widest">Return to Fleet</span>
           </Link>
           
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <button 
               onClick={() => isEditing ? handleSaveEdit() : setIsEditing(true)}
               className={cn(
-                "flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-[10px] font-bold uppercase tracking-widest border transition-all shadow-sm",
+                "flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 rounded-lg font-mono text-[9px] sm:text-[10px] font-bold uppercase tracking-widest border transition-all shadow-sm",
                 isEditing 
                   ? "bg-brand-primary border-brand-primary text-white hover:bg-brand-primary-hover shadow-brand-primary/20" 
                   : "bg-white border-slate-200 text-slate-600 hover:border-brand-primary hover:text-brand-primary"
               )}
             >
-              {isEditing ? <Save size={14} /> : <Settings size={14} />}
+              {isEditing ? <Save size={12} className="sm:w-3.5 sm:h-3.5" /> : <Settings size={12} className="sm:w-3.5 sm:h-3.5" />}
               {isEditing ? 'Commit Configuration' : 'Mod Configuration'}
             </button>
 
             {!isEditing && (
               <button 
                 onClick={handleDelete}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-[10px] font-bold uppercase tracking-widest border bg-white border-slate-200 text-slate-400 hover:border-red-200 hover:text-red-500 transition-all shadow-sm"
+                className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 rounded-lg font-mono text-[9px] sm:text-[10px] font-bold uppercase tracking-widest border bg-white border-slate-200 text-slate-400 hover:border-red-200 hover:text-red-500 transition-all shadow-sm"
               >
-                <Trash2 size={14} />
+                <Trash2 size={12} className="sm:w-3.5 sm:h-3.5" />
                 Decommission
               </button>
             )}
@@ -1027,22 +1054,22 @@ const RobotDetail = ({ robots, onUpdateRobot, onDeleteRobot }: { robots: Robot[]
             <button 
               onClick={() => setShowPowerConfirm(true)}
               className={cn(
-                "flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-[10px] font-bold uppercase tracking-widest border transition-all shadow-sm",
+                "flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 rounded-lg font-mono text-[9px] sm:text-[10px] font-bold uppercase tracking-widest border transition-all shadow-sm",
                 isOffline 
                   ? "bg-emerald-50 border-emerald-200 text-emerald-600 hover:bg-emerald-100" 
                   : "bg-red-50 border-red-200 text-red-600 hover:bg-red-100"
               )}
             >
-              <Power size={14} />
+              <Power size={12} className="sm:w-3.5 sm:h-3.5" />
               {isOffline ? 'Initiate Boot' : 'Emergency Stop'}
             </button>
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-10">
-          <div className="flex-1 space-y-6">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
+          <div className="flex-1 space-y-6 overflow-hidden">
             <div className="flex items-center justify-between">
-              <div>
+              <div className="w-full">
                 {isEditing ? (
                   <div className="space-y-4">
                     <div className="space-y-1">
@@ -1050,7 +1077,7 @@ const RobotDetail = ({ robots, onUpdateRobot, onDeleteRobot }: { robots: Robot[]
                       <input 
                         value={formData.model}
                         onChange={e => setFormData({ ...formData, model: e.target.value })}
-                        className="w-full text-4xl font-bold text-slate-900 tracking-tighter bg-slate-50 border-b-2 border-brand-primary px-2 py-1 outline-none"
+                        className="w-full text-xl sm:text-2xl md:text-4xl font-bold text-slate-900 tracking-tighter bg-slate-50 border-b-2 border-brand-primary px-2 py-1 outline-none"
                       />
                     </div>
                     <div className="space-y-1">
@@ -1064,11 +1091,11 @@ const RobotDetail = ({ robots, onUpdateRobot, onDeleteRobot }: { robots: Robot[]
                   </div>
                 ) : (
                   <>
-                    <h2 className="text-4xl font-bold text-slate-900 tracking-tighter">{robot.model}</h2>
-                    <div className="flex items-center gap-4 mt-2">
-                      <p className="text-brand-primary font-mono text-xs font-bold tracking-widest uppercase">SERIAL: {robot.serialNumber}</p>
+                    <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 tracking-tighter break-words">{robot.model}</h2>
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-2">
+                      <p className="text-brand-primary font-mono text-[10px] sm:text-xs font-bold tracking-widest uppercase">SERIAL: {robot.serialNumber}</p>
                       <span className={cn(
-                        "text-[10px] px-3 py-1 rounded-full uppercase font-bold",
+                        "text-[9px] sm:text-[10px] px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full uppercase font-bold",
                         robot.status === 'operational' ? "bg-emerald-500 text-white" : 
                         robot.status === 'error' ? "bg-red-500 text-white" : 
                         "bg-slate-400 text-white"
@@ -1082,38 +1109,38 @@ const RobotDetail = ({ robots, onUpdateRobot, onDeleteRobot }: { robots: Robot[]
             </div>
  
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3 border border-slate-150 rounded-xl">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-mono">Live Link: {visualMode.toUpperCase()} Diagnostic Mode</p>
                 </div>
-                <div className="flex bg-slate-100 p-1 rounded-lg">
+                <div className="flex bg-slate-100 p-1 rounded-lg w-fit">
                   <button 
                     onClick={() => setVisualMode('2d')}
                     className={cn(
-                      "px-3 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest transition-all flex items-center gap-2",
-                      visualMode === '2d' ? "bg-white text-brand-primary shadow-sm" : "text-slate-400 hover:text-slate-600"
+                      "px-2 sm:px-3 py-1 rounded-md text-[8px] sm:text-[9px] font-bold uppercase tracking-widest transition-all flex items-center gap-1.5 sm:gap-2",
+                      visualMode === '2d' ? "bg-white text-brand-primary shadow-sm animate-fade-in" : "text-slate-400 hover:text-slate-600"
                     )}
                   >
-                    <Square size={12} /> 2D Schematic
+                    <Square size={10} className="sm:w-3 sm:h-3" /> <span className="hidden xs:inline">2D Schematic</span><span className="xs:hidden">2D</span>
                   </button>
                   <button 
                     onClick={() => setVisualMode('3d')}
                     className={cn(
-                      "px-3 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest transition-all flex items-center gap-2",
-                      visualMode === '3d' ? "bg-white text-brand-primary shadow-sm" : "text-slate-400 hover:text-slate-600"
+                      "px-2 sm:px-3 py-1 rounded-md text-[8px] sm:text-[9px] font-bold uppercase tracking-widest transition-all flex items-center gap-1.5 sm:gap-2",
+                      visualMode === '3d' ? "bg-white text-brand-primary shadow-sm animate-fade-in" : "text-slate-400 hover:text-slate-600"
                     )}
                   >
-                    <Box size={12} /> 3D Simulator
+                    <Box size={10} className="sm:w-3 sm:h-3" /> <span className="hidden xs:inline">3D Simulator</span><span className="xs:hidden">3D</span>
                   </button>
                   <button 
                     onClick={() => setVisualMode('live')}
                     className={cn(
-                      "px-3 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest transition-all flex items-center gap-2",
-                      visualMode === 'live' ? "bg-white text-brand-primary shadow-sm" : "text-slate-400 hover:text-slate-600"
+                      "px-2 sm:px-3 py-1 rounded-md text-[8px] sm:text-[9px] font-bold uppercase tracking-widest transition-all flex items-center gap-1.5 sm:gap-2",
+                      visualMode === 'live' ? "bg-white text-brand-primary shadow-sm animate-fade-in" : "text-slate-400 hover:text-slate-600"
                     )}
                   >
-                    <Play size={12} /> Live Feed
+                    <Play size={10} className="sm:w-3 sm:h-3" /> <span className="hidden xs:inline">Live Feed</span><span className="xs:hidden">Live</span>
                   </button>
                 </div>
               </div>
@@ -1155,15 +1182,15 @@ const RobotDetail = ({ robots, onUpdateRobot, onDeleteRobot }: { robots: Robot[]
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.98 }}
                     transition={{ duration: 0.2 }}
-                    className="w-full h-96 bg-black rounded-xl overflow-hidden border border-slate-800 shadow-2xl relative"
+                    className="w-full h-60 xs:h-80 sm:h-96 md:h-[400px] bg-black rounded-xl overflow-hidden border border-slate-800 shadow-2xl relative"
                   >
                     <iframe 
-                      src="https://drive.google.com/file/d/1e8BZXgcWYZI34xDTv5s7HLrzk5JffOiC/preview" 
+                      src="https://drive.google.com/file/d/1e8BZXgcWYZI34xDTv5s7HLrzk5JffOiC/preview?autoplay=1&mute=1" 
                       className="absolute inset-0 w-full h-full border-0"
                       allow="autoplay; fullscreen"
                       title="Robot Live Feed"
                     />
-                    <div className="absolute top-4 left-4 flex items-center gap-2 bg-red-600/90 backdrop-blur px-3 py-1 rounded font-mono text-[10px] font-bold text-white uppercase tracking-widest z-10">
+                    <div className="absolute top-4 left-4 flex items-center gap-2 bg-red-600/90 backdrop-blur px-3 py-1 rounded font-mono text-[8px] sm:text-[10px] font-bold text-white uppercase tracking-widest z-10">
                       <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                       Live Feed: Unit {robot.serialNumber}
                     </div>
@@ -1172,12 +1199,12 @@ const RobotDetail = ({ robots, onUpdateRobot, onDeleteRobot }: { robots: Robot[]
               </AnimatePresence>
             </div>
 
-            <div className="grid grid-cols-3 gap-6">
-              <div className="card-nexus p-6 border-l-4 border-l-brand-primary">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+              <div className="card-nexus p-4 sm:p-6 border-l-4 border-l-brand-primary bg-white">
                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Arm Current</p>
                 <div className="flex items-baseline gap-2">
-                  <span className={cn("text-3xl font-mono font-bold", isOffline ? "text-slate-300" : activeSims.has('current') ? "text-red-600" : "text-slate-800")}>{telemetry.current}</span>
-                  <span className="text-xs text-slate-400 font-bold">AMPS</span>
+                  <span className={cn("text-2xl sm:text-3xl font-mono font-bold", isOffline ? "text-slate-300" : activeSims.has('current') ? "text-red-600" : "text-slate-800")}>{telemetry.current}</span>
+                  <span className="text-[10px] sm:text-xs text-slate-400 font-bold">AMPS</span>
                 </div>
                 <div className="w-full bg-slate-100 h-1 mt-4 rounded-full overflow-hidden">
                   <motion.div 
@@ -1186,11 +1213,11 @@ const RobotDetail = ({ robots, onUpdateRobot, onDeleteRobot }: { robots: Robot[]
                   />
                 </div>
               </div>
-              <div className="card-nexus p-6 border-l-4 border-l-amber-500">
+              <div className="card-nexus p-4 sm:p-6 border-l-4 border-l-amber-500 bg-white">
                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Vibration Delta</p>
                 <div className="flex items-baseline gap-2">
-                  <span className={cn("text-3xl font-mono font-bold", isOffline ? "text-slate-300" : activeSims.has('vibration') ? "text-red-600" : "text-slate-800")}>{telemetry.vibration}</span>
-                  <span className="text-xs text-slate-400 font-bold">G-RMS</span>
+                  <span className={cn("text-2xl sm:text-3xl font-mono font-bold", isOffline ? "text-slate-300" : activeSims.has('vibration') ? "text-red-600" : "text-slate-800")}>{telemetry.vibration}</span>
+                  <span className="text-[10px] sm:text-xs text-slate-400 font-bold">G-RMS</span>
                 </div>
                 <div className="w-full bg-slate-100 h-1 mt-4 rounded-full overflow-hidden">
                   <motion.div 
@@ -1199,11 +1226,11 @@ const RobotDetail = ({ robots, onUpdateRobot, onDeleteRobot }: { robots: Robot[]
                   />
                 </div>
               </div>
-              <div className="card-nexus p-6 border-l-4 border-l-orange-500">
+              <div className="card-nexus p-4 sm:p-6 border-l-4 border-l-orange-500 bg-white">
                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Core Temp</p>
                 <div className="flex items-baseline gap-2">
-                  <span className={cn("text-3xl font-mono font-bold", isOffline ? "text-slate-300" : activeSims.has('temperature') ? "text-red-600" : "text-slate-800")}>{telemetry.temperature}</span>
-                  <span className="text-xs text-slate-400 font-bold">°C</span>
+                  <span className={cn("text-2xl sm:text-3xl font-mono font-bold", isOffline ? "text-slate-300" : activeSims.has('temperature') ? "text-red-600" : "text-slate-800")}>{telemetry.temperature}</span>
+                  <span className="text-[10px] sm:text-xs text-slate-400 font-bold">°C</span>
                 </div>
                 <div className="w-full bg-slate-100 h-1 mt-4 rounded-full overflow-hidden">
                   <motion.div 
@@ -1215,38 +1242,38 @@ const RobotDetail = ({ robots, onUpdateRobot, onDeleteRobot }: { robots: Robot[]
             </div>
 
             {/* Time Series Log Section */}
-            <div className="card-nexus p-8 bg-white border border-slate-200">
-              <div className="flex items-center justify-between mb-8">
+            <div className="card-nexus p-4 sm:p-6 lg:p-8 bg-white border border-slate-200">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
-                    <TrendingUp size={20} className="text-brand-primary" /> Multi-Sensor telemetry Stream
+                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                    <TrendingUp size={18} className="text-brand-primary sm:w-[20px] sm:h-[20px]" /> Multi-Sensor telemetry Stream
                   </h3>
-                  <p className="text-xs text-slate-400 mt-1 uppercase font-mono tracking-wider">Sync: 1.0Hz Resolution | Real-time Analysis</p>
+                  <p className="text-[9px] sm:text-xs text-slate-400 mt-1 uppercase font-mono tracking-wider">Sync: 1.0Hz Resolution | Real-time Analysis</p>
                 </div>
                 
-                <div className="flex p-1 bg-slate-100 rounded-lg">
+                <div className="flex p-1 bg-slate-100 rounded-lg w-fit">
                   <button 
                     onClick={() => setViewMode('graph')}
                     className={cn(
-                      "px-4 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-widest transition-all flex items-center gap-2",
+                      "px-2.5 sm:px-4 py-1.5 rounded-md text-[8px] sm:text-[10px] font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5 sm:gap-2",
                       viewMode === 'graph' ? "bg-white text-brand-primary shadow-sm" : "text-slate-400 hover:text-slate-600"
                     )}
                   >
-                    <Activity size={14} /> Visualization
+                    <Activity size={12} className="sm:w-[14px] sm:h-[14px]" /> <span className="hidden xs:inline">Visualization</span><span className="xs:hidden">Graph</span>
                   </button>
                   <button 
                     onClick={() => setViewMode('table')}
                     className={cn(
-                      "px-4 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-widest transition-all flex items-center gap-2",
+                      "px-2.5 sm:px-4 py-1.5 rounded-md text-[8px] sm:text-[10px] font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5 sm:gap-2",
                       viewMode === 'table' ? "bg-white text-brand-primary shadow-sm" : "text-slate-400 hover:text-slate-600"
                     )}
                   >
-                    <TableIcon size={14} /> Data Chart
+                    <TableIcon size={12} className="sm:w-[14px] sm:h-[14px]" /> <span className="hidden xs:inline">Data Chart</span><span className="xs:hidden">Table</span>
                   </button>
                 </div>
               </div>
 
-              <div className="h-[640px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
+              <div className="h-[380px] sm:h-[500px] lg:h-[640px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
                 {isOffline ? (
                   <div className="h-full flex flex-col items-center justify-center border-2 border-dashed border-slate-100 rounded-xl bg-slate-50/30">
                     <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center text-slate-200 mb-4 shadow-sm">
@@ -1904,22 +1931,22 @@ const FabView = ({
             initial={{ y: -64, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -64, opacity: 0 }}
-            className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-brand-primary/20 flex items-center justify-between px-10 py-3 shadow-md shrink-0"
+            className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-brand-primary/20 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between px-4 sm:px-8 py-3 shadow-md shrink-0"
           >
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-brand-primary/10 flex items-center justify-center text-brand-primary">
+              <div className="w-8 h-8 rounded-lg bg-brand-primary/10 flex items-center justify-center text-brand-primary shrink-0">
                 <Settings size={18} className="animate-spin-slow" />
               </div>
-              <div>
+              <div className="truncate">
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Configuration Mode</p>
-                <p className="text-sm font-bold text-slate-800">{isNew ? 'Integrating New Terminal' : `Editing: ${existingFab?.name}`}</p>
+                <p className="text-sm font-bold text-slate-800 truncate">{isNew ? 'Integrating New Terminal' : `Editing: ${existingFab?.name}`}</p>
               </div>
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-2 sm:gap-4 w-full sm:w-auto">
               <button
                 type="button"
                 onClick={handleCancel}
-                className="px-6 py-2 bg-slate-100 text-slate-600 text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-slate-200 transition-colors"
+                className="flex-1 sm:flex-none px-4 sm:px-6 py-2 bg-slate-100 text-slate-600 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-slate-200 transition-colors"
               >
                 Cancel
               </button>
@@ -1930,9 +1957,9 @@ const FabView = ({
                   const form = document.querySelector('form') as HTMLFormElement;
                   if (form) form.requestSubmit();
                 }}
-                className="px-8 py-2 bg-brand-primary text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-brand-primary-hover shadow-lg shadow-brand-primary/20 transition-all flex items-center gap-2"
+                className="flex-1 sm:flex-none px-4 sm:px-8 py-2 bg-brand-primary text-white text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-brand-primary-hover shadow-lg shadow-brand-primary/20 transition-all flex items-center justify-center gap-1.5 sm:gap-2"
               >
-                <Save size={16} />
+                <Save size={14} className="sm:w-4 sm:h-4" />
                 {isNew ? 'Initialize Node' : 'Sync Changes'}
               </button>
             </div>
@@ -1940,23 +1967,23 @@ const FabView = ({
         )}
       </AnimatePresence>
 
-      <div className="flex-1 overflow-y-auto p-10">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-10">
         <div className="max-w-4xl mx-auto">
           {!isEditing && (
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
               <div>
-                <h2 className="text-3xl font-bold text-slate-900 tracking-tight">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
                   {formData.name}
                 </h2>
-                <p className="text-slate-500 mt-1 font-mono text-[11px] uppercase tracking-wider flex items-center gap-2">
+                <p className="text-slate-500 mt-1 font-mono text-[10px] sm:text-[11px] uppercase tracking-wider flex items-center gap-2">
                   Registry Node: <span className="text-brand-primary font-bold">{`FAB-00${id?.slice(0, 2)}`}</span>
                 </p>
               </div>
               <button 
                 onClick={() => setIsEditing(true)}
-                className="w-12 h-12 rounded-full border border-slate-200 bg-white text-slate-300 hover:text-brand-primary hover:border-brand-primary shadow-sm flex items-center justify-center transition-all"
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-slate-200 bg-white text-slate-300 hover:text-brand-primary hover:border-brand-primary shadow-sm flex items-center justify-center transition-all shrink-0 self-end sm:self-auto"
               >
-                <Settings size={24} />
+                <Settings size={20} className="sm:w-6 sm:h-6" />
               </button>
             </div>
           )}
@@ -2141,74 +2168,74 @@ const RobotHealthDashboard = ({ fabs, robots }: { fabs: Fab[], robots: Robot[] }
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex-1 overflow-y-auto p-10 bg-slate-50/50"
+      className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-10 bg-slate-50/50"
     >
-      <div className="max-w-6xl mx-auto space-y-8">
-        <div className="flex items-center justify-between">
+      <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
-              <LayoutDashboard size={32} className="text-brand-primary" />
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-2 sm:gap-3">
+              <LayoutDashboard size={24} className="text-brand-primary shrink-0 sm:w-8 sm:h-8" />
               Robot Health Dashboard
             </h2>
-            <p className="text-slate-500 mt-1 font-mono text-[11px] uppercase tracking-wider">
+            <p className="text-slate-500 mt-1 font-mono text-[10px] sm:text-[11px] uppercase tracking-wider">
               Fleet aggregation spanning <span className="text-brand-primary font-bold">{fabs.length}</span> facilities
             </p>
           </div>
-          <div className="flex items-center gap-4">
-             <div className="flex items-center gap-2 bg-white border border-slate-200 px-4 py-2 rounded-xl shadow-sm">
+          <div className="flex items-center self-start sm:self-auto shrink-0">
+             <div className="flex items-center gap-1.5 sm:gap-2 bg-white border border-slate-200 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl shadow-sm">
                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Real-time Link Active</span>
+                <span className="text-[8px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-widest">Real-time Link Active</span>
              </div>
           </div>
         </div>
 
         {/* Global KPIs */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="card-nexus p-6 bg-white border-l-4 border-l-brand-primary">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="card-nexus p-4 sm:p-6 bg-white border-l-4 border-l-brand-primary">
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Total Fleet Size</p>
-            <p className="text-3xl font-bold text-slate-900">{stats.total}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-slate-900">{stats.total}</p>
             <p className="text-[10px] text-slate-500 mt-2 font-mono flex items-center gap-1">
                <Bot size={12} className="text-brand-primary" /> Across all nodes
             </p>
           </div>
-          <div className="card-nexus p-6 bg-white border-l-4 border-l-emerald-500">
+          <div className="card-nexus p-4 sm:p-6 bg-white border-l-4 border-l-emerald-500">
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Healthy Units</p>
-            <p className="text-3xl font-bold text-emerald-600">{stats.operational}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-emerald-600">{stats.operational}</p>
             <p className="text-[10px] text-slate-500 mt-2 font-mono">
                {((stats.operational / stats.total) * 100).toFixed(1)}% availability
             </p>
           </div>
-          <div className="card-nexus p-6 bg-white border-l-4 border-l-red-500">
+          <div className="card-nexus p-4 sm:p-6 bg-white border-l-4 border-l-red-500">
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Critical Alerts</p>
-            <p className="text-3xl font-bold text-red-600">{stats.error}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-red-600">{stats.error}</p>
             <p className="text-[10px] text-slate-500 mt-2 font-mono flex items-center gap-1 uppercase tracking-tight">
                <AlertCircle size={12} /> Immediate focus required
             </p>
           </div>
-          <div className="card-nexus p-6 bg-white border-l-4 border-l-slate-400">
+          <div className="card-nexus p-4 sm:p-6 bg-white border-l-4 border-l-slate-400">
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Maintenance Queue</p>
-            <p className="text-3xl font-bold text-slate-600">{stats.offline}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-slate-600">{stats.offline}</p>
             <p className="text-[10px] text-slate-500 mt-2 font-mono uppercase tracking-tight">
                Decommissioned / Repair
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           {/* Status Distribution */}
-          <div className="card-nexus p-8 bg-white">
-            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
-              <PieChartIcon size={18} className="text-brand-primary" /> Fleet Health Distribution
+          <div className="card-nexus p-4 sm:p-6 lg:p-8 bg-white">
+            <h3 className="text-xs sm:text-sm font-bold text-slate-900 uppercase tracking-widest mb-4 sm:mb-6 flex items-center gap-2">
+              <PieChartIcon size={16} className="text-brand-primary sm:w-[18px] sm:h-[18px]" /> Fleet Health Distribution
             </h3>
-            <div className="h-64">
+            <div className="h-48 sm:h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
                     data={stats.statusData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
+                    innerRadius={50}
+                    outerRadius={70}
                     paddingAngle={5}
                     dataKey="value"
                   >
@@ -2220,16 +2247,16 @@ const RobotHealthDashboard = ({ fabs, robots }: { fabs: Fab[], robots: Robot[] }
                      contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '8px', color: '#fff' }}
                      itemStyle={{ color: '#fff', fontSize: '12px' }}
                   />
-                  <Legend />
+                  <Legend wrapperStyle={{ fontSize: '10px' }} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
           </div>
 
           {/* Fab Distribution */}
-          <div className="card-nexus p-8 bg-white">
-            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
-              <BarChart3 size={18} className="text-brand-primary" /> Units per Facility
+          <div className="card-nexus p-4 sm:p-6 lg:p-8 bg-white">
+            <h3 className="text-xs sm:text-sm font-bold text-slate-900 uppercase tracking-widest mb-4 sm:mb-6 flex items-center gap-2">
+              <BarChart3 size={16} className="text-brand-primary sm:w-[18px] sm:h-[18px]" /> Units per Facility
             </h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
@@ -2387,12 +2414,41 @@ export default function App() {
     }
   };
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [pathname]);
+
   return (
     <div className="flex flex-col h-screen w-full bg-brand-bg font-sans overflow-hidden">
-      <Header />
+      <Header onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
       
-      <main className="flex-1 flex overflow-hidden">
-        <Sidebar fabs={fabs} onDelete={handleDelete} onReset={handleReset} />
+      <main className="flex-1 flex overflow-hidden relative">
+        {/* Collapsible Mobile Sidebar off-canvas & Drawer */}
+        <div 
+          className={cn(
+            "fixed inset-y-0 left-0 z-40 lg:static lg:flex transform transition-transform duration-300 ease-in-out shrink-0 bg-white shadow-2xl lg:shadow-none h-full",
+            sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+          )}
+        >
+          <Sidebar 
+            fabs={fabs} 
+            onDelete={handleDelete} 
+            onReset={handleReset} 
+            onClose={() => setSidebarOpen(false)}
+          />
+        </div>
+
+        {/* Backdrop for mobile overlays */}
+        {sidebarOpen && (
+          <button 
+            onClick={() => setSidebarOpen(false)}
+            className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-30 lg:hidden focus:outline-none cursor-default w-full h-full"
+            aria-label="Close Sidebar"
+          />
+        )}
 
         <section className="flex-1 bg-slate-50 flex flex-col overflow-hidden relative">
           <Routes>
