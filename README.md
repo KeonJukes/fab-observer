@@ -1,12 +1,8 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Predictive Maintenance for Robotic Arms
+## By Lester Toy, Brandon Karp, and Keon Jukes
 
-# Run and deploy your AI Studio app
+A software that simulates AI agents predicting potential faults of robotic arms used in semiconductor fabs using temperature, current, and vibration sensor data. This software was made with Google AI Studio for a project worked on during Ohlone College's Semiconductor Skills Bridge Academy for presentation in conjunction with the project poster.
 
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/042d28ab-850a-493d-a4c4-e74df3379d02
 
 ## Run Locally
 
