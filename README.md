@@ -1,12 +1,9 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+[project header](PredictiveMaintenance.png)
 
-# Run and deploy your AI Studio app
+# Predictive Maintenance for Robotic Arms
+## Authors: Lester Toy, Brandon Karp, and Keon Jukes
 
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/042d28ab-850a-493d-a4c4-e74df3379d02
+The objective of this program is to simulate how AI agents can use robotic arm temperature, current, and vibration sensor data to predict faults before they occur. Reducing downtime would help fab's save on overhead cost associated with getting robotic arms back up and running. This project is part of the Ohlone College Semiconductor Skills Bridge Academy poster presentation event.
 
 ## Run Locally
 
