@@ -1,4 +1,4 @@
-[project header](PredictiveMaintenance.png)
+![project header](PredictiveMaintenance.png)
 
 # Predictive Maintenance for Robotic Arms
 ## Authors: Lester Toy, Brandon Karp, and Keon Jukes
