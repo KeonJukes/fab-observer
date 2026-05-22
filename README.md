@@ -106,8 +106,8 @@ The dashboard stands on a modern, robust framework architecture:
 
 ## Project Poster
 
-Click to view a PDF of the final project poster:
-[View PDF Documentation](./SSBASpringPoster.pdf)
+Click the link below to view a PDF of the final project poster:
+[View Project Poster PDF](./SSBASpringPoster.pdf)
 
 <!-- ## Test in Production
 
