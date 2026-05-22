@@ -102,6 +102,6 @@ The dashboard stands on a modern, robust framework architecture:
 *   **Emergency Stop**: Trigger emergency stops directly on the robot detail views to cut simulated currents and see sensor feeds enter decommission modes in real time.
 *   **Live Tab**: Switch to the `Live` panel under Robot details for the custom live stream feed representing current mechanical operations.
 
-## Test in Production
+<!-- ## Test in Production
 
-Here is the production link to test the project: https://fabmanager-semiconductor-facility-tracker-1066913899435.us-west2.run.app
+ Here is the production link to test the project: https://fabmanager-semiconductor-facility-tracker-1066913899435.us-west2.run.app -->
