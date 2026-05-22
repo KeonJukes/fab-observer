@@ -107,7 +107,7 @@ The dashboard stands on a modern, robust framework architecture:
 ## Project Poster
 
 Click to view a PDF of the final project poster:
-[View PDF Documentation](./SSBA Spring 2026 - Group 4 - Poster 1.pdf)
+[View PDF Documentation](./SSBASpringPoster.pdf)
 
 <!-- ## Test in Production
 
