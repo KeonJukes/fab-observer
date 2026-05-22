@@ -5,7 +5,7 @@
 
 The objective of this program is to simulate how AI agents can use robotic arm temperature, current, and vibration sensor data to predict faults before they occur. Reducing downtime would help fab's save on overhead cost associated with getting robotic arms back up and running. This project is part of the Ohlone College Semiconductor Skills Bridge Academy poster presentation event.
 
-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
 
 ## 🏭 Fabulous Fab Observer
 by Brandon Karp, Lester Toy, and Keon Jukes
